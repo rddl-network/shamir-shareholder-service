@@ -11,8 +11,14 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
-	service := service.NewShamirService(router)
-	err := service.Run()
+	db, err := service.InitDB("./data")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	service := service.NewShamirService(router, db)
+	err = service.Run()
 	if err != nil {
 		log.Fatalf("fatal error spinning up service: %s", err)
 	}

@@ -1,6 +1,14 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type MnemonicBody struct {
+	Mnemonic string `binding:"required" json:"mnemonic"`
+}
 
 func (ss *ShamirService) configureRouter() {
 	ss.router.Use(gin.Logger())
@@ -12,10 +20,37 @@ func (ss *ShamirService) registerRoutes() {
 	ss.router.POST("/mnemonic", ss.postMnemonic)
 }
 
-func (ss *ShamirService) getMnemonic(_ *gin.Context) {
+func (ss *ShamirService) getMnemonic(c *gin.Context) {
+	cipheredMnemonic, err := ss.GetMnemonic()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while fetching mnemonic"})
+		return
+	}
 
+	var resBody MnemonicBody
+	resBody.Mnemonic, err = ss.DecryptMnemonic(cipheredMnemonic, "keyphrase")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while decrypting mnemonic"})
+		return
+	}
+
+	c.JSON(http.StatusOK, resBody)
 }
 
-func (ss *ShamirService) postMnemonic(_ *gin.Context) {
+func (ss *ShamirService) postMnemonic(c *gin.Context) {
+	var reqBody MnemonicBody
+	if err := c.BindJSON(&reqBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
+	cipheredMnemonic, err := ss.EncryptMnemonic(reqBody.Mnemonic, "keyphrase")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while encrypting mnemonic"})
+		return
+	}
+
+	if err = ss.PutMnemonic(cipheredMnemonic); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while storing mnemonic"})
+	}
 }
