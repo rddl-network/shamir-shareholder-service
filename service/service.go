@@ -5,9 +5,11 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"fmt"
 	"io"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rddl-network/shamir-shareholder-service/config"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
@@ -24,7 +26,8 @@ func NewShamirService(router *gin.Engine, db *leveldb.DB) *ShamirService {
 }
 
 func (ss *ShamirService) Run() (err error) {
-	return ss.router.Run()
+	cfg := config.GetConfig()
+	return ss.router.Run(fmt.Sprintf("%s:%d", cfg.ServiceHost, cfg.ServicePort))
 }
 
 func (ss *ShamirService) EncryptMnemonic(mnemonic string, keyPhrase string) (ciphered []byte, err error) {
