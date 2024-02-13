@@ -25,6 +25,7 @@ func loadConfig(path string) (cfg *config.Config, err error) {
 		cfg.ServiceHost = v.GetString("service-host")
 		cfg.ServicePort = v.GetInt("service-port")
 		cfg.DBPath = v.GetString("db-path")
+		cfg.KeyPhrase = v.GetString("key-phrase")
 		return
 	}
 	log.Println("no config file found")

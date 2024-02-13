@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rddl-network/shamir-shareholder-service/config"
 )
 
 type MnemonicBody struct {
@@ -28,7 +29,7 @@ func (ss *ShamirService) getMnemonic(c *gin.Context) {
 	}
 
 	var resBody MnemonicBody
-	resBody.Mnemonic, err = ss.DecryptMnemonic(cipheredMnemonic, "keyphrase")
+	resBody.Mnemonic, err = ss.DecryptMnemonic(cipheredMnemonic, config.GetConfig().KeyPhrase)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while decrypting mnemonic"})
 		return
@@ -44,7 +45,7 @@ func (ss *ShamirService) postMnemonic(c *gin.Context) {
 		return
 	}
 
-	cipheredMnemonic, err := ss.EncryptMnemonic(reqBody.Mnemonic, "keyphrase")
+	cipheredMnemonic, err := ss.EncryptMnemonic(reqBody.Mnemonic, config.GetConfig().KeyPhrase)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while encrypting mnemonic"})
 		return
