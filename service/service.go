@@ -5,8 +5,13 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io"
+	"log"
+	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rddl-network/shamir-shareholder-service/config"
@@ -25,9 +30,42 @@ func NewShamirService(router *gin.Engine, db *leveldb.DB) *ShamirService {
 	return service
 }
 
+func (ss *ShamirService) configureTLS(caCertFile []byte) (tlsConfig *tls.Config) {
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCertFile)
+
+	return &tls.Config{
+		ClientCAs:                caCertPool,
+		ClientAuth:               tls.RequireAndVerifyClientCert,
+		MinVersion:               tls.VersionTLS13,
+		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_RSA_WITH_AES_256_CBC_SHA,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+		},
+	}
+}
+
 func (ss *ShamirService) Run() (err error) {
 	cfg := config.GetConfig()
-	return ss.router.Run(fmt.Sprintf("%s:%d", cfg.ServiceHost, cfg.ServicePort))
+	caCertFile, err := os.ReadFile(cfg.CertsPath + "ca.crt")
+	if err != nil {
+		log.Fatalf("error reading CA certificate: %v", err)
+	}
+
+	tlsConfig := ss.configureTLS(caCertFile)
+	server := &http.Server{
+		Addr:      fmt.Sprintf("%s:%d", cfg.ServiceHost, cfg.ServicePort),
+		TLSConfig: tlsConfig,
+		Handler:   ss.router,
+	}
+
+	return server.ListenAndServeTLS(cfg.CertsPath+"server.crt", cfg.CertsPath+"server.key")
 }
 
 func (ss *ShamirService) EncryptMnemonic(mnemonic string, keyPhrase string) (ciphered []byte, err error) {

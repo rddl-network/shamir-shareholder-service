@@ -7,6 +7,7 @@ service-host="{{ .ServiceHost }}"
 service-port={{ .ServicePort }}
 db-path="{{ .DBPath }}"
 key-phrase="{{ .KeyPhrase }}"
+certs-path="{{ .CertsPath }}"
 `
 
 type Config struct {
@@ -14,6 +15,7 @@ type Config struct {
 	ServiceHost string `mapstructure:"service-host"`
 	DBPath      string `mapstructure:"db-path"`
 	KeyPhrase   string `mapstructure:"key-phrase"`
+	CertsPath   string `mapstructure:"certs-path"`
 }
 
 // global singletonjj
@@ -29,6 +31,7 @@ func DefaultConfig() *Config {
 		ServiceHost: "localhost",
 		DBPath:      "./data",
 		KeyPhrase:   "keyphrase",
+		CertsPath:   "./certs/",
 	}
 }
 

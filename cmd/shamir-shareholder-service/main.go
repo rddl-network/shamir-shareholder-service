@@ -26,6 +26,7 @@ func loadConfig(path string) (cfg *config.Config, err error) {
 		cfg.ServicePort = v.GetInt("service-port")
 		cfg.DBPath = v.GetString("db-path")
 		cfg.KeyPhrase = v.GetString("key-phrase")
+		cfg.CertsPath = v.GetString("certs-path")
 		return
 	}
 	log.Println("no config file found")
@@ -69,8 +70,7 @@ func main() {
 	defer db.Close()
 
 	service := service.NewShamirService(router, db)
-	err = service.Run()
-	if err != nil {
+	if err = service.Run(); err != nil {
 		log.Fatalf("fatal error spinning up service: %s", err)
 	}
 }
