@@ -65,12 +65,13 @@ func main() {
 
 	db, err := service.InitDB(cfg.DBPath)
 	if err != nil {
+		db.Close()
 		log.Fatal(err)
 	}
 	defer db.Close()
 
 	service := service.NewShamirService(router, db)
 	if err = service.Run(); err != nil {
-		log.Fatalf("fatal error spinning up service: %s", err)
+		log.Panicf("fatal error spinning up service: %v", err)
 	}
 }

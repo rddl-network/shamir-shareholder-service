@@ -9,7 +9,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 
@@ -55,7 +54,7 @@ func (ss *ShamirService) Run() (err error) {
 	cfg := config.GetConfig()
 	caCertFile, err := os.ReadFile(cfg.CertsPath + "ca.crt")
 	if err != nil {
-		log.Fatalf("error reading CA certificate: %v", err)
+		return err
 	}
 
 	tlsConfig := ss.configureTLS(caCertFile)

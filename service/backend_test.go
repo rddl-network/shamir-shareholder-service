@@ -7,6 +7,7 @@ import (
 )
 
 func TestMnemonic(t *testing.T) {
+	t.Parallel()
 	app, _, db := setupService(t)
 	defer db.Close()
 
