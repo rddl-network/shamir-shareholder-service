@@ -6,12 +6,16 @@ const DefaultConfigTemplate = `
 service-host="{{ .ServiceHost }}"
 service-port={{ .ServicePort }}
 db-path="{{ .DBPath }}"
+key-phrase="{{ .KeyPhrase }}"
+certs-path="{{ .CertsPath }}"
 `
 
 type Config struct {
 	ServicePort int    `mapstructure:"service-port"`
 	ServiceHost string `mapstructure:"service-host"`
 	DBPath      string `mapstructure:"db-path"`
+	KeyPhrase   string `mapstructure:"key-phrase"`
+	CertsPath   string `mapstructure:"certs-path"`
 }
 
 // global singletonjj
@@ -26,6 +30,8 @@ func DefaultConfig() *Config {
 		ServicePort: 8080,
 		ServiceHost: "localhost",
 		DBPath:      "./data",
+		KeyPhrase:   "keyphrase",
+		CertsPath:   "./certs/",
 	}
 }
 

@@ -42,7 +42,8 @@ func TestGetMnemonicRoute(t *testing.T) {
 	assert.Equal(t, 200, w.Code)
 
 	var resBody service.MnemonicBody
-	json.Unmarshal(w.Body.Bytes(), &resBody)
+	err = json.Unmarshal(w.Body.Bytes(), &resBody)
+	assert.NoError(t, err)
 	assert.Equal(t, "mnemonic", resBody.Mnemonic)
 }
 
