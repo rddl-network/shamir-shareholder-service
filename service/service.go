@@ -9,6 +9,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"os"
 
@@ -64,7 +65,15 @@ func (ss *ShamirService) Run() (err error) {
 		Handler:   ss.router,
 	}
 
-	return server.ListenAndServeTLS(cfg.CertsPath+"server.crt", cfg.CertsPath+"server.key")
+	// workaround to listen on tcp4 and not tcp6
+	// https://stackoverflow.com/a/38592286
+	ln, err := net.Listen("tcp4", server.Addr)
+	if err != nil {
+		return err
+	}
+	defer ln.Close()
+
+	return server.ServeTLS(ln, cfg.CertsPath+"server.crt", cfg.CertsPath+"server.key")
 }
 
 func (ss *ShamirService) EncryptMnemonic(mnemonic string, keyPhrase string) (ciphered []byte, err error) {
