@@ -12,6 +12,7 @@ import (
 
 type IShamirShareholderClient interface {
 	GetMnemonic(ctx context.Context) (res service.MnemonicBody, err error)
+	PostMnemonic(ctx context.Context, mnemonic string) (err error)
 }
 
 type ShamirShareholderClient struct {
