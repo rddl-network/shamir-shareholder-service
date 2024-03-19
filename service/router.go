@@ -7,10 +7,6 @@ import (
 	"github.com/rddl-network/shamir-shareholder-service/config"
 )
 
-type MnemonicBody struct {
-	Mnemonic string `binding:"required" json:"mnemonic"`
-}
-
 func (ss *ShamirService) configureRouter() {
 	ss.router.Use(gin.Logger())
 	ss.router.Use(gin.Recovery())
