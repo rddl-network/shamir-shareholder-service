@@ -20,14 +20,14 @@ func (ss *ShamirService) registerRoutes() {
 func (ss *ShamirService) getMnemonic(c *gin.Context) {
 	cipheredMnemonic, err := ss.GetMnemonic()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while fetching mnemonic"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error while fetching mnemonic"})
 		return
 	}
 
 	var resBody MnemonicBody
 	resBody.Mnemonic, err = ss.DecryptMnemonic(cipheredMnemonic, config.GetConfig().KeyPhrase)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while decrypting mnemonic"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error while decrypting mnemonic"})
 		return
 	}
 
@@ -37,17 +37,17 @@ func (ss *ShamirService) getMnemonic(c *gin.Context) {
 func (ss *ShamirService) postMnemonic(c *gin.Context) {
 	var reqBody MnemonicBody
 	if err := c.BindJSON(&reqBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 		return
 	}
 
 	cipheredMnemonic, err := ss.EncryptMnemonic(reqBody.Mnemonic, config.GetConfig().KeyPhrase)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while encrypting mnemonic"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error while encrypting mnemonic"})
 		return
 	}
 
 	if err = ss.PutMnemonic(cipheredMnemonic); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error while storing mnemonic"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": "error while storing mnemonic"})
 	}
 }
