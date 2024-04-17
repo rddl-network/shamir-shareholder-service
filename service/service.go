@@ -14,6 +14,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/rddl-network/go-logger"
 	"github.com/rddl-network/shamir-shareholder-service/config"
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -21,10 +22,11 @@ import (
 type ShamirService struct {
 	router *gin.Engine
 	db     *leveldb.DB
+	logger log.AppLogger
 }
 
-func NewShamirService(router *gin.Engine, db *leveldb.DB) *ShamirService {
-	service := &ShamirService{router: router, db: db}
+func NewShamirService(router *gin.Engine, db *leveldb.DB, logger log.AppLogger) *ShamirService {
+	service := &ShamirService{router: router, db: db, logger: logger}
 	service.configureRouter()
 	service.registerRoutes()
 	return service

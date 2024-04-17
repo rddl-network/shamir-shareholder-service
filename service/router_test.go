@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/rddl-network/go-logger"
 	"github.com/rddl-network/shamir-shareholder-service/service"
 	"github.com/stretchr/testify/assert"
 	"github.com/syndtr/goleveldb/leveldb"
@@ -21,7 +22,7 @@ func setupService(t *testing.T) (app *service.ShamirService, router *gin.Engine,
 	if err != nil {
 		t.Fatal("Error opening in-memory LevelDB: ", err)
 	}
-	app = service.NewShamirService(router, db)
+	app = service.NewShamirService(router, db, log.GetLogger(log.DEBUG))
 	return
 }
 
