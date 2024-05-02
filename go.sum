@@ -77,8 +77,8 @@ github.com/pelletier/go-toml/v2 v2.1.0/go.mod h1:tJU2Z3ZkXwnxa4DPO899bsyIoywizdU
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/rddl-network/go-logger v0.0.2 h1:Tlmatv6uROq3ZQrojU3ucJ2GeIViGIQQ2OFFLCQMXNA=
-github.com/rddl-network/go-logger v0.0.2/go.mod h1:HIWf1yOLW6nyXBxFiuVqc+YegNI9/j9RZ4u4SPWhuJ8=
+github.com/rddl-network/go-utils v0.0.3 h1:OtgID5tbC8hk/kmTfZ0p72Vg4PHuuJYj95Wve/GiLBs=
+github.com/rddl-network/go-utils v0.0.3/go.mod h1:4Sly5GBH8KlpLmRcS2a7RuZh+kbeD2C2TqPSoCVIGGE=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/spf13/afero v1.11.0 h1:WJQKhtpdm3v2IzqG8VMqrr6Rf3UYpEF239Jy9wNepM8=
