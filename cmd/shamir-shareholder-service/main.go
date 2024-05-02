@@ -7,7 +7,7 @@ import (
 	"text/template"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rddl-network/go-logger"
+	"github.com/rddl-network/go-utils/logger"
 	"github.com/rddl-network/shamir-shareholder-service/config"
 	"github.com/rddl-network/shamir-shareholder-service/service"
 	"github.com/spf13/viper"

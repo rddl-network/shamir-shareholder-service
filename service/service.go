@@ -14,7 +14,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/rddl-network/go-logger"
+	log "github.com/rddl-network/go-utils/logger"
 	"github.com/rddl-network/shamir-shareholder-service/config"
 	"github.com/syndtr/goleveldb/leveldb"
 )
