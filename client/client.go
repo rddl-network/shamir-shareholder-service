@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/rddl-network/shamir-shareholder-service/service"
+	"github.com/rddl-network/shamir-shareholder-service/types"
 )
 
 type IShamirShareholderClient interface {
-	GetMnemonic(ctx context.Context) (res service.MnemonicBody, err error)
+	GetMnemonic(ctx context.Context) (res types.MnemonicBody, err error)
 	PostMnemonic(ctx context.Context, mnemonic string) (err error)
 }
 
@@ -31,13 +31,13 @@ func NewShamirShareholderClient(baseURL string, client *http.Client) *ShamirShar
 	}
 }
 
-func (ssc *ShamirShareholderClient) GetMnemonic(ctx context.Context) (res service.MnemonicBody, err error) {
+func (ssc *ShamirShareholderClient) GetMnemonic(ctx context.Context) (res types.MnemonicBody, err error) {
 	err = ssc.doRequest(ctx, http.MethodGet, ssc.baseURL+"/mnemonic", nil, &res)
 	return
 }
 
 func (ssc *ShamirShareholderClient) PostMnemonic(ctx context.Context, mnemonic string) (err error) {
-	requestBody := service.MnemonicBody{
+	requestBody := types.MnemonicBody{
 		Mnemonic: mnemonic,
 	}
 	err = ssc.doRequest(ctx, http.MethodPost, ssc.baseURL+"/mnemonic", requestBody, nil)
