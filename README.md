@@ -24,9 +24,10 @@ go run cmd/shamir-shareholder-service/main.go
 ## Configuration
 The service needs to be configured via the ```./app.toml``` file or environment variables. The defaults are
 ```
+certs-path = './certs/'
 db-path = './data'
+key-phrase = 'keyphrase'
+log-level = 'error'
 service-host = 'localhost'
 service-port = 8080
-key-phrase='keyPhrase'
-certs-path='./certs/'
 ```
