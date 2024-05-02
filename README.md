@@ -16,6 +16,12 @@ curl --cert client.crt --key client.key --cacert ca.crt -d "{\"mnemonic\":\"mnem
 ```
 
 ## Execution
+
+This service relies on TLS certificates.
+For production use you NEED to create your own.
+However for convenience you'll find TLS certificates in this repo.
+Just change `certs-path` to `'./example/certs/'` (see next section).
+
 The service can be executed via the following go command without having it previously built:
 ```bash
 go run cmd/shamir-shareholder-service/main.go
