@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strings"
 
-	"github.com/rddl-network/shamir-shareholder-service/service"
+	"github.com/rddl-network/shamir-shareholder-service/types"
 )
 
 type IShamirShareholderClient interface {
-	GetMnemonic(ctx context.Context) (res service.MnemonicBody, err error)
+	GetMnemonic(ctx context.Context) (res types.MnemonicBody, err error)
 	PostMnemonic(ctx context.Context, mnemonic string) (err error)
 }
 
@@ -30,13 +31,13 @@ func NewShamirShareholderClient(baseURL string, client *http.Client) *ShamirShar
 	}
 }
 
-func (ssc *ShamirShareholderClient) GetMnemonic(ctx context.Context) (res service.MnemonicBody, err error) {
+func (ssc *ShamirShareholderClient) GetMnemonic(ctx context.Context) (res types.MnemonicBody, err error) {
 	err = ssc.doRequest(ctx, http.MethodGet, ssc.baseURL+"/mnemonic", nil, &res)
 	return
 }
 
 func (ssc *ShamirShareholderClient) PostMnemonic(ctx context.Context, mnemonic string) (err error) {
-	requestBody := service.MnemonicBody{
+	requestBody := types.MnemonicBody{
 		Mnemonic: mnemonic,
 	}
 	err = ssc.doRequest(ctx, http.MethodPost, ssc.baseURL+"/mnemonic", requestBody, nil)
@@ -69,7 +70,7 @@ func (ssc *ShamirShareholderClient) doRequest(ctx context.Context, method, url s
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return &httpError{StatusCode: resp.StatusCode}
+		return &httpError{StatusCode: resp.StatusCode, Msg: strings.Join(resp.Header["Error"], "\n")}
 	}
 
 	if response != nil {
@@ -81,8 +82,9 @@ func (ssc *ShamirShareholderClient) doRequest(ctx context.Context, method, url s
 
 type httpError struct {
 	StatusCode int
+	Msg        string
 }
 
 func (e *httpError) Error() string {
-	return http.StatusText(e.StatusCode)
+	return http.StatusText(e.StatusCode) + ": " + e.Msg
 }

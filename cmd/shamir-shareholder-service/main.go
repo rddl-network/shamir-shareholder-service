@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rddl-network/go-utils/logger"
 	"github.com/rddl-network/shamir-shareholder-service/config"
 	"github.com/rddl-network/shamir-shareholder-service/service"
 	"github.com/spf13/viper"
@@ -27,6 +28,7 @@ func loadConfig(path string) (cfg *config.Config, err error) {
 		cfg.DBPath = v.GetString("db-path")
 		cfg.KeyPhrase = v.GetString("key-phrase")
 		cfg.CertsPath = v.GetString("certs-path")
+		cfg.LogLevel = v.GetString("log-level")
 		return
 	}
 	log.Println("no config file found")
@@ -70,7 +72,7 @@ func main() {
 	}
 	defer db.Close()
 
-	service := service.NewShamirService(router, db)
+	service := service.NewShamirService(router, db, logger.GetLogger(cfg.LogLevel))
 	if err = service.Run(); err != nil {
 		log.Panicf("fatal error spinning up service: %v", err)
 	}

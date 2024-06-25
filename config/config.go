@@ -1,6 +1,10 @@
 package config
 
-import "sync"
+import (
+	"sync"
+
+	log "github.com/rddl-network/go-utils/logger"
+)
 
 const DefaultConfigTemplate = `
 service-host="{{ .ServiceHost }}"
@@ -8,6 +12,7 @@ service-port={{ .ServicePort }}
 db-path="{{ .DBPath }}"
 key-phrase="{{ .KeyPhrase }}"
 certs-path="{{ .CertsPath }}"
+log-level="{{ .LogLevel }}"
 `
 
 type Config struct {
@@ -16,6 +21,7 @@ type Config struct {
 	DBPath      string `mapstructure:"db-path"`
 	KeyPhrase   string `mapstructure:"key-phrase"`
 	CertsPath   string `mapstructure:"certs-path"`
+	LogLevel    string `mapstructure:"log-level"`
 }
 
 // global singletonjj
@@ -32,6 +38,7 @@ func DefaultConfig() *Config {
 		DBPath:      "./data",
 		KeyPhrase:   "keyphrase",
 		CertsPath:   "./certs/",
+		LogLevel:    log.ERROR,
 	}
 }
 
