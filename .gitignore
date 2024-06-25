@@ -22,4 +22,4 @@ go.work
 
 app.toml
 data
-certs
+/certs

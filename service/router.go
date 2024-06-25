@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rddl-network/shamir-shareholder-service/config"
+	"github.com/rddl-network/shamir-shareholder-service/types"
 )
 
 func (ss *ShamirService) configureRouter() {
@@ -25,7 +26,7 @@ func (ss *ShamirService) getMnemonic(c *gin.Context) {
 		return
 	}
 
-	var resBody MnemonicBody
+	var resBody types.MnemonicBody
 	resBody.Mnemonic, err = ss.DecryptMnemonic(cipheredMnemonic, config.GetConfig().KeyPhrase)
 	if err != nil {
 		ss.logger.Error("msg", "error while decrypting mnemonic")
@@ -37,7 +38,7 @@ func (ss *ShamirService) getMnemonic(c *gin.Context) {
 }
 
 func (ss *ShamirService) postMnemonic(c *gin.Context) {
-	var reqBody MnemonicBody
+	var reqBody types.MnemonicBody
 	if err := c.BindJSON(&reqBody); err != nil {
 		ss.logger.Error("msg", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})

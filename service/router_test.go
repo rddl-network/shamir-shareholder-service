@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/rddl-network/go-utils/logger"
 	"github.com/rddl-network/shamir-shareholder-service/service"
+	"github.com/rddl-network/shamir-shareholder-service/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/storage"
@@ -42,7 +43,7 @@ func TestGetMnemonicRoute(t *testing.T) {
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 200, w.Code)
 
-	var resBody service.MnemonicBody
+	var resBody types.MnemonicBody
 	err = json.Unmarshal(w.Body.Bytes(), &resBody)
 	assert.NoError(t, err)
 	assert.Equal(t, "mnemonic", resBody.Mnemonic)
@@ -54,19 +55,19 @@ func TestPostMnemonicRoute(t *testing.T) {
 
 	tests := []struct {
 		desc    string
-		reqBody service.MnemonicBody
+		reqBody types.MnemonicBody
 		code    int
 	}{
 		{
 			desc: "valid request",
-			reqBody: service.MnemonicBody{
+			reqBody: types.MnemonicBody{
 				Mnemonic: "mnemonic",
 			},
 			code: 200,
 		},
 		{
 			desc:    "invalid request",
-			reqBody: service.MnemonicBody{},
+			reqBody: types.MnemonicBody{},
 			code:    400,
 		},
 	}
