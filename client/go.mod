@@ -1,6 +1,6 @@
 module github.com/rddl-network/shamir-shareholder-service/client
 
-go 1.21.5
+go 1.22
 
 require (
 	github.com/rddl-network/shamir-shareholder-service v0.1.1
